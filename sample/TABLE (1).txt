@@ -1,0 +1,180 @@
+gtp_permission - permission lookup table
+gtp_role_permission - role permission relation table
+gtp_company_role - stores company aassigned role
+gtp_role - role lookup table
+gtp_user - stored user profile detail
+gtp_company - stores company profile detail 
+gtp_product_lc_tnx - stores lc transaction detail
+gtp_user_group_role - stores user aassigned role
+gtp_user_group_role_tnx - store maker level user assign role
+gtp_product_authoriser_tnx - stores next authoriser detail of the product transaction
+gtp_product_jurisdiction_tnx - user audit detail
+
+access_customer_mc
+access_customer_user_mc
+
+--Select
+--select * from tableName;
+select * from gtp_product_lc_tnx;
+select * from  gtp_company;
+select * from gtp_user_group_role;
+select * from gtp_role;
+select * from gtp_user;
+select * from gtp_company_role;
+select * from gtp_permission;
+
+
+--Select Distinct--Remove Duplicates
+--select Distinct columnName from tableName;
+
+select DISTINCT actv_flag from gtp_user;
+select DISTINCT company_id from gtp_company_role;
+select DISTINCT user_id from gtp_user_group_role;
+select DISTINCT Applicant_abbv_name from gtp_product_lc_tnx;
+select Distinct country from gtp_company;
+
+
+
+--Where filter data with specified condition
+--select * from tableName where columname='columnValue';
+select * from gtp_product_lc_tnx where appl_date='24-MAR-22 12.00.00.000000000 AM' ;
+select * from gtp_company where abbv_name='FRESHWORKS';
+SELECT * from gtp_user where company_id='2';
+select * from gtp_permission where permission_id='701';
+select * from gtp_role where roledest='01';
+
+--And
+--select * from tableName where columnname1="colValue' and ColumnName2='colValue';
+select * from  gtp_product_lc_tnx where company_id='422' and ref_id='LC22030000000040';
+select * from gtp_company where abbv_name='SBI' and country='US';
+select * from gtp_user where company_abbv_name='TCS' and cur_code='USD';
+select * from gtp_company where abbv_name='TCS' and Language='en';
+select * from gtp_company_role where role_id='615' and company_id='401';
+
+
+--Or
+--select * from tablename where columnName='colValue' or columnName2='colvalue'
+select * from gtp_product_lc_tnx where ref_id='LC22030000000040' or ref_id='LC220400000004900';
+select * from  gtp_user where company_abbv_name='HDFC' or company_abbv_name='UAB';
+select * from gtp_permission where permission_id='649' or permission_id='6481';
+
+
+
+--Not
+--select * from tbalename where not columnName='columnvalue';
+select * from gtp_company where not abbv_name='HDFC';
+select * from gtp_user where not company_id='2';
+select * from gtp_role where not roledest='01';
+
+--Order By -->The ORDER BY keyword is used to sort the result-set in ascending or descending order.
+--select * from tablename order by columnname;
+select * from  gtp_role order by ROLEname;
+select * from  gtp_role order by role_id;
+select * from gtp_company order by company_id DESC;
+select * from gtp_user order by user_id ASC,company_id desc;
+select * from gtp_user order by company_abbv_name asc;
+
+--Null Values
+--select columname from tablename where columnName is null;
+select user_id, company_id, country from gtp_user where country is not NULL;
+select deleted from gtp_user where deleted is null;
+select deleted from gtp_user where deleted is not null;
+select company_group from gtp_company where company_group is null;
+select company_group from gtp_company where company_group is not null;
+
+
+
+
+
+--Insert
+--insert into tablename(columnname1, columnname2,....) values ('columnValue1', 'columnvalue2',..);
+--insert into gtp_user_group_role (user_id,group_id,role_id,Limit_cur_code,limit_amt) values ('483','2','912','',''),('483','2','909','','');
+INSERT into gtp_user_group_role (user_id,group_id,role_id,Limit_cur_code,limit_amt) values ('470','2','908','','');
+
+select * from gtp_user_group_role where user_id='483';
+COMMIT;
+select * from gtp_user_group_role;
+select * from gtp_user where company_abbv_name='GRT' and login_id='VERIFIER' ;
+
+
+
+
+
+
+--Update
+
+--update tablename set columnname='colValue going to update' where '
+select * from gtp_user;
+select * from  gtp_company;
+update gtp_company set time_zone='Asia/Calcutta' where company_id='423';
+update gtp_user set language='en' where company_id='460';
+COMMIT;
+
+
+
+
+--delete
+-- delete from tablename where columnname='colValue';
+select * from gtp_user_group_role;
+delete from gtp_user_group_role where user_id='483';
+
+
+--Count 
+--select count(colname) from tablename
+select count(role_id) from gtp_role;
+select count(permission_id) from gtp_permission;
+select count(company_id) from gtp_user;
+select COUNT(ref_id) from gtp_product_lc_tnx;
+
+--like
+--select * from tablename where columname like 'a%';
+select * from gtp_company where name like '____H%';
+select * from gtp_user where company_abbv_name like 'T%';
+select * from gtp_role where role_id like '3%2';
+
+
+
+--in
+--select * from tablename where columnname in ('colValue1','colvalue2'..)
+select * from gtp_user where company_id in('2','423','445');
+select * from gtp_role where roledest in ('03');
+
+
+
+--JOins InnerJoin
+--select tablename1.columname1, tablename2.columname2 from tablename1 inner join tablename2 on tablename1.commoncolumnname1=tablename2.commoncolumnanme2;
+
+select lc.ref_id,lc.cust_ref_id, lc.applicant_name, att.file_name,att.title from gtp_product_lc_tnx lc inner join gtp_attachment_tnx att on lc.ref_id=att.ref_id where att.ref_id='LC22040000000981';
+
+select com.name, com.abbv_name, gt.login_id,gt.password_value  from gtp_user gt inner join gtp_company com on gt.company_id=com.company_id where com.abbv_name in ('TCS','FRESHWORKS','HDFC');
+
+select product_code,cust_ref_id,sub_product_code,tnx_type_code,sub_tnx_type_code from gtp_product_lc_tnx where ref_id='LC22040000000981' ;
+select * from gtp_attachment_tnx where ref_id='LC22040000000981';
+
+select * from gtp_product_objectdata_tnx where ref_id='LC22040000000981';
+
+
+
+--Groupby
+select * from gtp_user;
+select * from gtp_company;
+
+select count(user_id),company_id FROM gtp_user group by company_id;
+
+
+select * from gtp_param_data where parm_id='P707' and key_3='LC' and key_2='FORM' and key_5 in('01','*') and key_9='*' and key_5='01' ;
+
+
+
+
+select * from gtp_company;
+select * from gtp_user;
+
+select * from gtp_product_lc_tnx where sub_tnx_stat_code='01' and company_name='FRESHWORKS';
+select * from gtp_product_lc_tnx where sub_tnx_stat_code='02' and company_name='GRT';
+select * from gtp_product_lc_tnx where sub_tnx_stat_code='03' and company_name='GRT';
+select * from gtp_product_lc_tnx where sub_tnx_stat_code='04' and company_name='GRT';
+select * from gtp_product_lc_tnx where sub_tnx_stat_code='05' and company_name='GRT';
+
+select * from gtp_product_objectdata_tnx where ref_id='LC22040000001014';
+
