@@ -3,3 +3,4 @@ git push -u origin main - for pushing
 git pull - for pulling
 Pavithra Udhayakumar
 Check the merge
+Try the same in command prompt
