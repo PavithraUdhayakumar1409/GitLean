@@ -1,8 +1,0 @@
-git commit -m "file name" - for comitting
-git push -u origin main - for pushing
-git pull - for pulling
-vffgg
-pull req
-change request
-check it
-Try the same in command prompt
